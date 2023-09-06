@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"acommerce/models"
+	"encoding/json"
 	"net/http"
 	"time"
 
@@ -107,4 +108,66 @@ func (a *Auth) GetTransactions(e echo.Context) error {
 	}
 
 	return e.JSON(http.StatusOK, transactions)
+}
+
+func (a *Auth) GetStores(e echo.Context) error {
+	var stores []models.Store
+	if err := a.db.Table("public.store").Find(&stores).Error; err != nil {
+		return e.JSON(http.StatusInternalServerError, map[string]string{
+			"message": err.Error(),
+		})
+	}
+
+	return e.JSON(http.StatusOK, stores)
+}
+
+func (a *Auth) GetWeatherByCityName(e echo.Context) error {
+	city := e.QueryParam("city") // Mengambil nama kota dari query parameter
+
+	weatherDataStr, err := GetWeatherRapidAPI(city)
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to fetch weather data"})
+	}
+
+	var weatherData models.WeatherData
+	if err := json.Unmarshal([]byte(weatherDataStr), &weatherData); err != nil {
+		return e.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to unmarshal weather data"})
+	}
+
+	return e.JSON(http.StatusOK, weatherData)
+}
+
+func (a *Auth) GetStoreByID(e echo.Context) error {
+	storeID := e.Param("id") // Ambil ID toko dari URL parameter
+
+	var store models.Store
+	if err := a.db.Table("public.store").First(&store, storeID).Error; err != nil {
+		return e.JSON(http.StatusNotFound, map[string]string{
+			"message": "Store not found",
+		})
+	}
+
+	// Mengambil data cuaca berdasarkan kota toko
+	weatherDataStr, err := GetWeatherRapidAPI(store.Alamat)
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, map[string]string{
+			"message": "Failed to fetch weather data for store",
+		})
+	}
+
+	// Unmarshal JSON response menjadi objek WeatherData
+	var weatherData models.WeatherData
+	err = json.Unmarshal([]byte(weatherDataStr), &weatherData)
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, map[string]string{
+			"message": "Failed to parse weather data",
+		})
+	}
+
+	// Menyimpan data cuaca ke dalam toko
+	store.WeatherData = weatherData
+
+	// Kirim response
+
+	return e.JSON(http.StatusOK, store)
 }

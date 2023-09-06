@@ -1,1 +1,3 @@
 migrate -database "postgres://postgres:123456@localhost:5432/acommerce?sslmode=disable" -path migrations up 
+
+migrate create -ext sql -dir migrations alter_table_transactions

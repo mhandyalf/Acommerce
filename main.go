@@ -16,6 +16,9 @@ func main() {
 	e.POST("/login", authhandler.Login)
 	e.GET("/products", authhandler.GetProducts, middleware.JWTAuth)
 	e.GET("/transactions", authhandler.GetTransactions, middleware.JWTAuth)
+	e.GET("/stores", authhandler.GetStores)
+	e.GET("/weather", authhandler.GetWeatherByCityName)
+	e.GET("/store/:id", authhandler.GetStoreByID)
 
 	e.Logger.Fatal(e.Start(":8080"))
 

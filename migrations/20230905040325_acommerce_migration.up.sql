@@ -19,3 +19,5 @@ CREATE TABLE transactions (
     quantity INTEGER NOT NULL,
     total_amount DOUBLE PRECISION NOT NULL
 );
+
+
