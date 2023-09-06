@@ -8,10 +8,11 @@ type User struct {
 }
 
 type Product struct {
-	ID    uint `gorm:"primaryKey"`
-	Name  string
-	Stock int
-	Price float64
+	ID      uint `gorm:"primaryKey"`
+	Name    string
+	Stock   int
+	Price   float64
+	StoreID uint `gorm:"foreignKey:StoreID"`
 }
 
 type Transaction struct {

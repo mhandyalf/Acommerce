@@ -9,6 +9,7 @@ import (
 )
 
 func JWTAuth(next echo.HandlerFunc) echo.HandlerFunc {
+
 	return func(c echo.Context) error {
 		tokenHeader := c.Request().Header.Get("Authorization")
 		if tokenHeader == "" {
