@@ -4,6 +4,8 @@ import (
 	"acommerce/database"
 	"acommerce/handlers"
 	"acommerce/middleware"
+	"fmt"
+	"os"
 
 	"github.com/labstack/echo/v4"
 )
@@ -21,6 +23,6 @@ func main() {
 	e.GET("/store/:id", authhandler.GetStoreByID)
 	e.POST("/buy", authhandler.BuyProduct, middleware.JWTAuth)
 
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
 
 }

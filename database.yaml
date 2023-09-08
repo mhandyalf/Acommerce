@@ -1,3 +1,9 @@
 migrate -database "postgres://postgres:123456@localhost:5432/acommerce?sslmode=disable" -path migrations up 
 
+
 migrate create -ext sql -dir migrations alter_table_transactions
+
+
+"user=postgres password=$zLP8ZZJzzByL.$ dbname=postgres host=db.yamzgmeiezqqkgteurma.supabase.co port=5432 sslmode=disable"
+
+"user=postgres password=123456 dbname=acommerce host=localhost port=5432 sslmode=disable"
