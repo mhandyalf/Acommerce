@@ -1,6 +1,8 @@
 package database
 
 import (
+	"os"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -10,7 +12,7 @@ type DB struct {
 }
 
 func InitDB() *gorm.DB {
-	dsn := "user=postgres password=$zLP8ZZJzzByL.$ dbname=postgres host=db.yamzgmeiezqqkgteurma.supabase.co port=5432 sslmode=disable"
+	dsn := os.Getenv("POSTGRESQL")
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {

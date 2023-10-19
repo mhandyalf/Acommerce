@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 )
 
 func GetWeatherRapidAPI(city string) (string, error) {
@@ -14,7 +15,7 @@ func GetWeatherRapidAPI(city string) (string, error) {
 		return "", err
 	}
 
-	req.Header.Add("X-RapidAPI-Key", "1930c8ef0dmsh589af469b5e014ap177d48jsna6e21baafd45")
+	req.Header.Add("X-RapidAPI-Key", os.Getenv("RAPIDAPI"))
 	req.Header.Add("X-RapidAPI-Host", "weather-by-api-ninjas.p.rapidapi.com")
 
 	res, err := http.DefaultClient.Do(req)
